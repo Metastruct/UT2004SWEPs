@@ -99,7 +99,11 @@ function SWEP:DoDamage(tr)
 end
 
 function SWEP:ResetSkin()
-	self:GetOwner():GetViewModel():SetSkin(0)
+	local owner = self:GetOwner()
+	if not owner:IsValid() then return end
+	local vm = owner:GetViewModel()
+	if not vm:IsValid() then return end
+	vm:SetSkin(0)
 end
 
 function SWEP:PreDrawViewModel(vm)
@@ -111,7 +115,7 @@ function SWEP:OnRemove()
 	if game.SinglePlayer() then
 		self:CallOnClient("ResetSkin")
 	else
-		if CLIENT and IsValid(self:GetOwner()) then
+		if CLIENT then
 			self:ResetSkin()
 		end
 	end
